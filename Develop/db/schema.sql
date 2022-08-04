@@ -17,6 +17,4 @@ CREATE TABLE ROLE (
      department_id int,
     FOREIGN KEY (department_id) REFERENCES department (id) 
 
-
-
 );

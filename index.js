@@ -1,1 +1,1 @@
-const inquire = requre("")
+const inquire = requre("") 
