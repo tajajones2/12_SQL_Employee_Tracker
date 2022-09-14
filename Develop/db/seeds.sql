@@ -24,7 +24,7 @@ VALUES ("John", "Doe", 1),
        ("Sarah", "Lourd", 4),
        ("Tom", "Allen", 4),
 
-       UPDATE employee SET manager=1 WHERE id=2;
+UPDATE employee SET manager=1 WHERE id=2;
 
 
 
