@@ -1,4 +1,4 @@
-const connectToDB = require("./config/connection");
+const connectionToDB = require("./config/connection");
 const inquirer = require("inquirer");
 
 
