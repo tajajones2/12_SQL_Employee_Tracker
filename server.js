@@ -1,25 +1,24 @@
-const connectToDB = require("./config/connection");
-const inquirer = require("inquirer");
-const cTable = require("console.table");
+const { getUserSelection } = require("./db_utils/userOptions");
 
-//
-let db;
+// this will start program
+function init() {
+    // Logo String
+    console.log(String.raw`
+     _____                       _                              
+    | ____|  _ __ ___    _ __   | |   ___    _   _    ___    ___ 
+    |  _|   |  _   _ \  |  _ \  | |  / _ \  | | | |  / _ \  / _ \
+    | |___  | | | | | | | |_) | | | | (_) | | |_| | |  __/ |  __/
+    |_____| |_| |_| |_| | .__/  |_|  \___/   \__, |  \___|  \___|
+                        |_|                  |___/               
+     __  __                                                     
+    |  \/  |   __ _   _ __     __ _    __ _    ___   _ __        
+    | |\/| |  / _  | |  _ \   / _  |  / _  |  / _ \ |  __|      
+    | |  | | | (_| | | | | | | (_| | | (_| | |  __/ | |          
+    |_|  |_|  \__,_| |_| |_|  \__,_|  \__, |  \___| |_|          
+                                      |___/                      
+    `);
 
-// this is the Menu Options
-const userOptions = [
-    {
-        type: "list",
-        name: "option",
-        message: "Please choose an option: ",
-        choices: [
-            "View All Employees",
-            "Add Employee",
-            "Update Employee Role",
-            "View All Roles",
-            "Add Role",
-            "View All Departments",
-            "Add Department",
-            "Quit",
-        ],
-    },
-];
+    getUserSelection();
+}
+
+init();
