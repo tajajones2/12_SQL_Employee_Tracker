@@ -62,6 +62,17 @@ if (!found) {
   console.log("This department already exists!");
 }
 
+// this will display all deparment in in database
+
+async function viewAllDeparments(){
+    const [data] = await db.query(
+        `SELECT * from department ORDER by department.name`
+    )
+
+    console.table(data);
+    getUserSelection();
+}
+
 
 async function getUserSelection() {
     // connect to database
