@@ -65,7 +65,7 @@ if (!found) {
 
 async function getUserSelection() {
     // connect to database
-    db = await connectToDB();
+    db = await connectionToDB();
 }
 
 
