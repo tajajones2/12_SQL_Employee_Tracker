@@ -1,8 +1,8 @@
-const connectionToDB = require("./config/connection");
+const connection = require("../config/connection");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
-const { catchError } = require("rxjs");
-const { get } = require("https");
+// const { catchError } = require("rxjs");
+// const { get } = require("https");
 
 //
 let db;
@@ -35,50 +35,46 @@ async function addDepartment() {
   } catch (error) {
     console.log(error);
   }
-}
 
-const { newDepartment } = await inquirer.prompt({
-  type: "input",
-  message: "What is the name of the departemnt?",
-  name: "newDepartment",
-});
+  const { newDepartment } = await inquirer.prompt({
+    type: "input",
+    message: "What is the name of the departemnt?",
+    name: "newDepartment",
+  });
 
-const found = deptData.some(({ name }) => {
-  return name == newDepartment;
-});
+  const found = deptData.some(({ name }) => {
+    return name == newDepartment;
+  });
 
-if (!found) {
-  try {
-    const result = await db.query(
-      `INSERT INTO deparment (name)
+  if (!found) {
+    try {
+      const result = await db.query(
+        `INSERT INTO deparment (name)
             VALUES ("${newDepartment}")`
-    );
-  } catch (error) {
-    console.log(error);
+      );
+    } catch (error) {
+      console.log(error);
+    }
+
+    getUserSelection();
+  } else {
+    console.log("This department already exists!");
   }
-
-  getUserSelection();
-} else {
-  console.log("This department already exists!");
 }
-
 // this will display all deparment in in database
 
-async function viewAllDeparments(){
-    const [data] = await db.query(
-        `SELECT * from department ORDER by department.name`
-    )
+async function viewAllDeparments() {
+  const [data] = await db.query(
+    `SELECT * from department ORDER by department.name`
+  );
 
-    console.table(data);
-    getUserSelection();
+  console.table(data);
+  getUserSelection();
 }
-
 
 async function getUserSelection() {
-    // connect to database
-    db = await connectionToDB();
+  // connect to database
+  db = await connection();
 }
-
-
 
 module.exports = { getUserSelection };
