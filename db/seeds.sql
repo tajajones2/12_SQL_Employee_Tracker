@@ -2,7 +2,7 @@ INSERT INTO department (name)
 VALUES ("Sales"),
        ("Engineering"),
        ("Finance"),
-       ("Legal"),
+       ("Legal");
 
 INSERT INTO role (title, salary, department_id)
 VALUES ('Sales Lead', 100000, 1),
@@ -12,7 +12,7 @@ VALUES ('Sales Lead', 100000, 1),
        ("Account Manager", 160000, 3),
        ("Accountant", 125000, 3),
        ("Legal Team Leader", 250000, 4),
-       ("Lawyer", 190000, 4),
+       ("Lawyer", 190000, 4);
 
 INSERT INTO employee (first_name, last_name, role_id)
 VALUES ("John", "Doe", 1),
@@ -22,10 +22,6 @@ VALUES ("John", "Doe", 1),
        ("Kunal", "Singh", 3),
        ("Malia", "Brown", 3),
        ("Sarah", "Lourd", 4),
-       ("Tom", "Allen", 4),
+       ("Tom", "Allen", 4);
 
-UPDATE employee SET manager=1 WHERE id=2;
-
-
-
-
+UPDATE employee SET manager_id=1 WHERE id=2;

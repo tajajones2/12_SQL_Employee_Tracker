@@ -26,7 +26,7 @@ const userOptions = [
   },
 ];
 
-// this will add  daepartent to datbase
+// this will add dapartent to datbase
 async function addDepartment() {
   let deptData;
 
@@ -36,11 +36,13 @@ async function addDepartment() {
     console.log(error);
   }
 
-  const { newDepartment } = await inquirer.prompt({
-    type: "input",
-    message: "What is the name of the departemnt?",
-    name: "newDepartment",
-  });
+  const { newDepartment } = await inquirer.prompt([
+    {
+      type: "input",
+      message: "What is the name of the departemnt?",
+      name: "newDepartment",
+    },
+  ]);
 
   const found = deptData.some(({ name }) => {
     return name == newDepartment;
@@ -68,13 +70,30 @@ async function viewAllDeparments() {
     `SELECT * from department ORDER by department.name`
   );
 
+
   console.table(data);
   getUserSelection();
 }
 
 async function getUserSelection() {
   // connect to database
-  db = await connection();
+  db = db || (await connection());
+
+  const { option } = await inquirer.prompt(userOptions);
+// to do - replaced undefined w/ functions 
+  const optionsToFunctions = {
+    "View All Employees" : undefined,
+    "Add Employee" : undefined,
+    "Update Employee Role" : undefined,
+    "View All Roles": undefined,
+    "Add Role": undefined,
+    "View All Departments": viewAllDeparments,
+    "Add Department": undefined,
+    "Quit": process.exit,
+  }
+
+  optionsToFunctions[option] ()
 }
+
 
 module.exports = { getUserSelection };
