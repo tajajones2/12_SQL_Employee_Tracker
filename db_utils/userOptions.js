@@ -75,6 +75,71 @@ async function viewAllDeparments() {
   getUserSelection();
 }
 
+async function addEmployee() {
+  let currentEmployees;
+  let managerInfo;
+  let employeeFound;
+
+  try {
+    [currentEmployees] = await db.query(
+        `SELECT first_name, last_name FROM employee `
+    );
+} catch (error) {
+    console.log(error);
+}
+
+try {
+  [roleData] = await db.query(`select title as name, id value from role`);
+} catch (error) {
+  console.log(error);
+}
+
+const { firstName, lastName, roleId, manager } = await inquirer.prompt([
+  {
+      type: "input",
+      message: "What is the employee's first name? ",
+      name: "firstName",
+  },
+  {
+      type: "input",
+      message: "What is the employee's last name? ",
+      name: "lastName",
+  },
+  {
+      type: "list",
+      message: "What is the employee's role? ",
+      name: "roleId",
+      choices: roleData,
+  },
+  {
+      type: "list",
+      message: "Who is the employee's manager? ",
+      name: "manager",
+      choices: managerInfo,
+  },
+]);
+
+
+currentEmployees.forEach((employee) => {
+  if (
+      employee.first_name.toLowerCase() === firstName.toLowerCase() &&
+      employee.last_name.toLowerCase() === lastName.toLowerCase()
+  )
+      employeeFound = true;
+});
+
+if (employeeFound) {
+  console.log(`${firstName} ${lastName} already exists`);
+  getUserSelection();
+} else {
+  await db.query(`
+      INSERT INTO employee (first_name, last_name, role_id, manager_id)
+      VALUES("${firstName}", "${lastName}", "${roleId}", "${manager}")
+  `);
+  getUserSelection();
+}
+}
+
 async function getUserSelection() {
   // connect to database
   db = db || (await connection());
@@ -83,12 +148,12 @@ async function getUserSelection() {
 // to do - replaced undefined w/ functions 
   const optionsToFunctions = {
     "View All Employees" : undefined,
-    "Add Employee" : undefined,
+    "Add Employee" : addEmployee,
     "Update Employee Role" : undefined,
     "View All Roles": undefined,
     "Add Role": undefined,
     "View All Departments": viewAllDeparments,
-    "Add Department": undefined,
+    "Add Department": addDepartment,
     "Quit": process.exit,
   }
 
