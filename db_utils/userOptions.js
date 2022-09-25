@@ -179,6 +179,8 @@ async function viewRoles() {
   getUserSelection();
 }
 
+
+
 // updated for Employee role in database
 async function updateEmployeeRole() {
   const [employeeList] = await db.query(
@@ -221,7 +223,65 @@ async function updateEmployeeRole() {
   );
   getUserSelection();
 }
+// Adding role to db
+async function addRole() {
+  let roleFound;
 
+  // Get role info
+  try {
+      [roleData] = await db.query(`SELECT * FROM role`);
+  } catch (error) {
+      console.log(err);
+  }
+
+  // Get department info
+  try {
+      [departmentData] = await db.query(
+          `SELECT name, id as value from department`
+      );
+  } catch (error) {
+      console.log(error);
+  }
+
+  const { roleName, salaryAmount, departmentName } = await inquirer.prompt([
+      {
+          type: "input",
+          message: "What is the name of the role? ",
+          name: "roleName",
+      },
+      {
+          type: "input",
+          message: "What is the salary of the role? ",
+          name: "salaryAmount",
+      },
+      {
+          type: "list",
+          message: "which department does the role belong to? ",
+          name: "departmentName",
+          choices: departmentData,
+      },
+  ]);
+
+  console.log(
+      `Role Name: ${roleName}, Salary: ${salaryAmount}, Department: ${departmentName}`
+  );
+
+  // Check if department already exists
+  roleData.forEach(({ title }) => {
+      if (title.toLowerCase() === roleName.toLowerCase()) roleFound = true;
+  });
+
+  if (roleFound) {
+      console.log(`\nno good, ${roleName} already exists\n`);
+      getUserSelection();
+  } else {
+      // console.log(`${roleName}, ${salaryAmount}, ${departmentName}`)
+      await db.query(`INSERT INTO role (title, salary, department_id)
+      VALUES ("${roleName}", "${salaryAmount}", "${departmentName}")
+      `);
+      getUserSelection();
+  }
+}
 
 async function getUserSelection() {
   // connect to database
@@ -234,7 +294,7 @@ async function getUserSelection() {
     "Add Employee": addEmployee,
     "Update Employee Role": updateEmployeeRole,
     "View All Roles": viewRoles,
-    "Add Role": undefined,
+    "Add Role": addRole,
     "View All Departments": viewAllDeparments,
     "Add Department": addDepartment,
     Quit: process.exit,
