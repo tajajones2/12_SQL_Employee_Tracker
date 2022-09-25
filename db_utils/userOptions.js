@@ -179,6 +179,49 @@ async function viewRoles() {
   getUserSelection();
 }
 
+// updated for Employee role in database
+async function updateEmployeeRole() {
+  const [employeeList] = await db.query(
+      `SELECT
+      id,
+      first_name,
+      last_name,
+      CONCAT(employee.first_name, " " ,employee.last_name) as name,
+      role_id as value
+      FROM employee`
+  );
+
+  const [roleList] = await db.query(
+      `SELECT
+      title as name,
+      id as value
+      FROM role`
+  );
+
+  const { employeeName, role } = await inquirer.prompt([
+      {
+          type: "list",
+          name: "employeeName",
+          message: "Which employee's role do you want to update? ",
+          choices: employeeList,
+      },
+      {
+          type: "list",
+          name: "role",
+          message: "Which role do you want to assign the selected employee? ",
+          choices: roleList,
+      },
+  ]);
+
+  await db.query(
+      `UPDATE employee
+      SET role_id = '${role}'
+      WHERE role_id = '${employeeName}'
+  `
+  );
+  getUserSelection();
+}
+
 
 async function getUserSelection() {
   // connect to database
@@ -189,7 +232,7 @@ async function getUserSelection() {
   const optionsToFunctions = {
     "View All Employees": viewAllEmployees,
     "Add Employee": addEmployee,
-    "Update Employee Role": undefined,
+    "Update Employee Role": updateEmployeeRole,
     "View All Roles": viewRoles,
     "Add Role": undefined,
     "View All Departments": viewAllDeparments,
