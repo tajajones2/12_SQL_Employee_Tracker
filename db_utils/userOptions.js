@@ -162,6 +162,24 @@ async function viewAllEmployees() {
   getUserSelection();
 }
 
+// Display all Roles in db
+async function viewRoles() {
+  const [data] = await db.query(
+      `
+      SELECT role.id, 
+      role.title, 
+      department.name as department, 
+      role.salary 
+      FROM role 
+      LEFT JOIN department 
+      ON role.department_id=department.id`
+  );
+
+  console.table(data);
+  getUserSelection();
+}
+
+
 async function getUserSelection() {
   // connect to database
   db = db || (await connection());
@@ -172,7 +190,7 @@ async function getUserSelection() {
     "View All Employees": viewAllEmployees,
     "Add Employee": addEmployee,
     "Update Employee Role": undefined,
-    "View All Roles": undefined,
+    "View All Roles": viewRoles,
     "Add Role": undefined,
     "View All Departments": viewAllDeparments,
     "Add Department": addDepartment,
