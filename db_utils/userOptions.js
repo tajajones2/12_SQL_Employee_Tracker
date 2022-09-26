@@ -298,7 +298,7 @@ async function getUserSelection() {
     "View All Departments": viewAllDeparments,
     "Add Department": addDepartment,
     Quit: process.exit,
-    
+
   };
 
   optionsToFunctions[option]();
